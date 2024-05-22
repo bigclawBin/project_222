@@ -83,6 +83,4 @@ const sendUpdatedGames = (req, res) => {
   });
 };
 
-module.exports = { sendAllGames, sendUpdatedGames };
-
-module.exports = { sendAllGames, deleteGame, addGameController };
+module.exports = { sendAllGames, deleteGame, addGameController, sendUpdatedGames };

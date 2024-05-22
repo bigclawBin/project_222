@@ -1,10 +1,9 @@
-const { readData, writeData } = require("../utils/data");
+const { readData, writeData } = require("../utils/data/index");
 
 const getAllGames = async (req, res, next) => {
-  const games = await readData("./data/games.json");
+  const games = await readData("./utils/data/games.json");
   if (!games) {
-    res.status(400);
-    res.send({
+    res.status(400).send({
       status: "error",
       message: "Нет игр в базе данных. Добавь игру."
     });
@@ -22,12 +21,7 @@ const checkIsTitleInArray = (req, res, next) => {
 const updateGamesArray = (req, res, next) => {
   if (req.isNew) {
     const inArray = req.games.map(item => Number(item.id));
-    let maximalId;
-    if (inArray.length > 0) {
-      maximalId = Math.max(...inArray);
-    } else {
-      maximalId = 0;
-    }
+    const maximalId = inArray.length > 0 ? Math.max(...inArray) : 0;
 
     req.updatedObject = {
       id: maximalId + 1,
@@ -39,13 +33,12 @@ const updateGamesArray = (req, res, next) => {
     req.games = [...req.games, req.updatedObject];
     next();
   } else {
-    res.status(400);
-    res.send({ status: "error", message: "Игра с таким именем уже есть." });
+    res.status(400).send({ status: "error", message: "Игра с таким именем уже есть." });
   }
 };
 
 const updateGamesFile = async (req, res, next) => {
-  await writeData("./data/games.json", req.games);
+  await writeData("./utils/data/games.json", req.games);
   next();
 };
 
